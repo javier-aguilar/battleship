@@ -63,4 +63,12 @@ class Board
       coordinate1[1] == coordinate2[1] && coordinate1[0].ord == (coordinate2[0].ord - 1)
     end
   end
+
+  def place(ship, coordinates)
+    if(valid_placement?(ship, coordinates))
+      coordinates.each do |coordinate|
+        @cells[coordinate].place_ship(ship)
+      end
+    end
+  end
 end
