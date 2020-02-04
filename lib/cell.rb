@@ -10,6 +10,10 @@ class Cell
     @ship == nil ? true : false
   end
 
+  def place_ship(ship)
+    @ship = ship
+  end
+
 
 
 

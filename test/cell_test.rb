@@ -17,17 +17,24 @@ class CellTest < Minitest::Test
     assert_equal "B4", cell.coordinate
   end
 
-  def test_it_has_a_ship
-    cell = Cell.new("B4")
-
-    assert_nil cell.ship
-  end
-
   def test_is_empty
     cell = Cell.new("B4")
-
+    cruiser = Ship.new("Cruiser", 3)
     assert_equal true, cell.empty?
 
+    cell.place_ship(cruiser)
+
+    assert_equal false, cell.empty?
+  end
+
+  def test_it_can_place_ship
+    cell = Cell.new("B4")
+    assert_nil cell.ship
+
+    cruiser = Ship.new("Cruiser", 3)
+    cell.place_ship(cruiser)
+
+    assert_equal cruiser, cell.ship
   end
 
 
