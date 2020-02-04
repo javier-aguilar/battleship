@@ -49,21 +49,26 @@ class CellTest < Minitest::Test
   end
 
   def test_it_can_render
-    cell = Cell.new("B4")
+    cell1 = Cell.new("B4")
 
-    assert_equal ".", cell.render
-    cell.fire_upon
-    assert_equal "M", cell.render
+    assert_equal ".", cell1.render
+
+    cell1.fire_upon
+    assert_equal "M", cell1.render
+    
 # shouldnt be able to place a ship after a cell has been fired upon
+    cell2 = Cell.new("C3")
     cruiser = Ship.new("Cruiser", 3)
-    cell.place_ship(cruiser)
-    cell.fire_upon
-    assert_equal "H", cell.render
+    cell2.place_ship(cruiser)
+    assert_equal "S", cell2.render(true)
+
+    cell2.fire_upon
+    assert_equal "H", cell2.render
 
     cruiser.hit
     cruiser.hit
 
-    assert_equal "X", cell.render
+    assert_equal "X", cell2.render
   end
 
 
