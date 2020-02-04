@@ -6,6 +6,10 @@ class Cell
     @ship = nil
   end
 
+  def empty?
+    @ship == nil ? true : false
+  end
+
 
 
 
