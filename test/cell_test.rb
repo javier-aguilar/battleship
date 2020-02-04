@@ -48,6 +48,24 @@ class CellTest < Minitest::Test
     assert_equal true, cell.fired_upon?
   end
 
+  def test_it_can_render
+    cell = Cell.new("B4")
+
+    assert_equal ".", cell.render
+    cell.fire_upon
+    assert_equal "M", cell.render
+# shouldnt be able to place a ship after a cell has been fired upon
+    cruiser = Ship.new("Cruiser", 3)
+    cell.place_ship(cruiser)
+    cell.fire_upon
+    assert_equal "H", cell.render
+
+    cruiser.hit
+    cruiser.hit
+
+    assert_equal "X", cell.render
+  end
+
 
 
 
