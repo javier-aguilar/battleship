@@ -26,9 +26,11 @@ class Cell
     @cell_hit ? true : false
   end
 
-  def render
+  def render(show = false)
     render_output = ""
-    if fired_upon? == false
+    if show == true && @ship != nil
+      render_output = "S"
+    elsif fired_upon? == false
       render_output = "."
     elsif fired_upon? == true && @ship == nil
       render_output = "M"
