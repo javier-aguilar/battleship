@@ -14,11 +14,19 @@ class Cell
     @ship = ship
   end
 
+  def fire_upon
+    if @ship != nil
+      @ship.hit
+    end
+  end
 
-
-
-
-
+  def fired_upon?
+    if @ship != nil && @ship.length != @ship.health
+      true
+    else
+      false
+    end
+  end
 
 
 
