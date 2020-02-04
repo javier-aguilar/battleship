@@ -43,5 +43,9 @@ class ShipTest < Minitest::Test
     cruiser.hit
     cruiser.hit
     assert_equal 1, cruiser.health
+
+    cruiser.hit
+    cruiser.hit
+    assert_equal 0, cruiser.health
   end
 end
