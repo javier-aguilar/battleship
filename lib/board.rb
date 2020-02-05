@@ -43,8 +43,6 @@ class Board
   end
 
   def can_place_horizontal?(coordinates)
-    range = []
-    @cells.map {|cell_key, cell_value| range << cell_key}
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
       coordinate1[0] == coordinate2[0] && coordinate1[1].to_i == (coordinate2[1].to_i - 1)
     end
@@ -52,8 +50,6 @@ class Board
 
   def can_place_vertical?(coordinates)
     # A = 65, B = 66, C = 67, D = 68
-    range = []
-    @cells.map {|cell_key, cell_value| range << cell_key}
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
       coordinate1[1] == coordinate2[1] && coordinate1[0].ord == (coordinate2[0].ord - 1)
     end
