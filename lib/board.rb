@@ -32,7 +32,7 @@ class Board
 
   def valid_placement?(ship, coordinates)
     if ship.length == coordinates.length
-      if can_place_vertical?(coordinates) || can_place_horizontal?(coordinates)
+      if (can_place_vertical?(coordinates) || can_place_horizontal?(coordinates)) && is_occupied?(coordinates) == false
         true
       else
         false
@@ -42,7 +42,7 @@ class Board
     end
   end
 
-  def can_place_vertical?(coordinates)
+  def can_place_horizontal?(coordinates)
     range = []
     @cells.map {|cell_key, cell_value| range << cell_key}
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
@@ -50,7 +50,7 @@ class Board
     end
   end
 
-  def can_place_horizontal?(coordinates)
+  def can_place_vertical?(coordinates)
     # A = 65, B = 66, C = 67, D = 68
     range = []
     @cells.map {|cell_key, cell_value| range << cell_key}
@@ -65,5 +65,32 @@ class Board
         @cells[coordinate].place_ship(ship)
       end
     end
+  end
+
+  def is_occupied?(coordinates)
+    coordinates.one? {|coordinate| @cells[coordinate].empty? }
+  end
+
+  def render_board
+    col1 = []
+    col2 = []
+    col3 = []
+    col4 = []
+    @cells.each do |key, value|
+      if key[1].to_i == 1
+        col1 << value.render(true)
+      elsif key[1].to_i  == 2
+        col2 << value.render(true)
+      elsif key[1].to_i  == 3
+        col3 << value.render(true)
+      elsif key[1].to_i  == 4
+        col4 << value.render(true)
+      end
+    end
+    puts " 1 2 3 4"
+    puts "A #{col1[0]} #{col2[0]} #{col3[0]} #{col4[0]} \n"
+    puts "B #{col1[1]} #{col2[1]} #{col3[1]} #{col4[1]} \n"
+    puts "C #{col1[2]} #{col2[2]} #{col3[2]} #{col4[2]} \n"
+    puts "D #{col1[3]} #{col2[3]} #{col3[3]} #{col4[3]} \n"
   end
 end
