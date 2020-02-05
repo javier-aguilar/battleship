@@ -44,14 +44,28 @@ class Board
 
   def can_place_horizontal?(coordinates)
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
-      coordinate1[0] == coordinate2[0] && coordinate1[1].to_i == (coordinate2[1].to_i - 1)
+      coordinate1_letter = coordinate1[0].ord #Ex: A of A1
+      coordinate1_number = coordinate1[1].to_i #Ex: 1 of A1
+
+      coordinate2_letter = coordinate2[0].ord #Ex: A of A2
+      coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
+
+      coordinate1_letter == coordinate2_letter && coordinate1_number == (coordinate2_number - 1)
+
     end
   end
 
   def can_place_vertical?(coordinates)
     #A = 65, B = 66, C = 67, D = 68
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
-      coordinate1[1] == coordinate2[1] && coordinate1[0].ord == (coordinate2[0].ord - 1)
+      coordinate1_letter = coordinate1[0].ord #Ex: A of A1
+      coordinate1_number = coordinate1[1].to_i #Ex: 1 of A1
+
+      coordinate2_letter = coordinate2[0].ord #Ex: A of A2
+      coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
+
+      coordinate1_number == coordinate2_number && coordinate1_letter == (coordinate2_letter - 1)
+
     end
   end
 
