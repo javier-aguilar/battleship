@@ -49,7 +49,7 @@ class Board
   end
 
   def can_place_vertical?(coordinates)
-    # A = 65, B = 66, C = 67, D = 68
+    #A = 65, B = 66, C = 67, D = 68
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
       coordinate1[1] == coordinate2[1] && coordinate1[0].ord == (coordinate2[0].ord - 1)
     end
