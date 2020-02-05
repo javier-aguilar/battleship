@@ -28,7 +28,7 @@ class Cell
 
   def render(show = false)
     render_output = ""
-    if show == true && @ship != nil
+    if show == true && @ship != nil && fired_upon? == false
       render_output = "S"
     elsif fired_upon? == false
       render_output = "."
@@ -38,15 +38,8 @@ class Cell
       render_output = "H"
     elsif fired_upon? == true && @ship != nil && @ship.sunk?
       render_output = "X"
-
-
-
     end
     render_output
   end
-
-
-
-
 
 end
