@@ -3,6 +3,8 @@ class Board
 
   def initialize
     @cells = {}
+    @length = 0
+    @width = 0
   end
   def generate(length, width)
     row_count = 1
@@ -10,8 +12,8 @@ class Board
     @length = length
     @width = width
     (@length * @width).times do
-      if row_count <= width
-        width.times do
+      if row_count <= @width
+        @width.times do
           coordinate = "#{(row_count + 64).chr}#{col_count}"
           @cells[coordinate] = Cell.new(coordinate)
           col_count += 1
@@ -77,26 +79,20 @@ class Board
     coordinates.one? {|coordinate| @cells[coordinate].empty? }
   end
 
-  def render_board
-    col1 = []
-    col2 = []
-    col3 = []
-    col4 = []
-    @cells.each do |key, value|
-      if key[1].to_i == 1
-        col1 << value.render(true)
-      elsif key[1].to_i  == 2
-        col2 << value.render(true)
-      elsif key[1].to_i  == 3
-        col3 << value.render(true)
-      elsif key[1].to_i  == 4
-        col4 << value.render(true)
+  def render_board(show_ship)
+    row_labels = ('A'.. (@length + 64).chr).to_a
+    col_labels = (1..@width).to_a
+    row_output = []
+
+    puts " #{column_labels.join (' ')} \n"
+    row_labels.each do | row |
+      @cells.each do |coordinate, cell|
+        if coordinate[0] == row
+          row_output << cell.render(show_ship)
+        end
       end
+      puts "#{row} #{row_output.join(" ")}\n"
+      row_output = []
     end
-    puts " 1 2 3 4"
-    puts "A #{col1[0]} #{col2[0]} #{col3[0]} #{col4[0]} \n"
-    puts "B #{col1[1]} #{col2[1]} #{col3[1]} #{col4[1]} \n"
-    puts "C #{col1[2]} #{col2[2]} #{col3[2]} #{col4[2]} \n"
-    puts "D #{col1[3]} #{col2[3]} #{col3[3]} #{col4[3]} \n"
   end
 end
