@@ -79,20 +79,22 @@ class Board
     coordinates.one? {|coordinate| @cells[coordinate].empty? }
   end
 
-  def render_board(show_ship)
+  def render(show_ship = false)
     row_labels = ('A'.. (@length + 64).chr).to_a
     col_labels = (1..@width).to_a
     row_output = []
+    output = ""
 
-    puts " #{column_labels.join (' ')} \n"
+    output << "  #{col_labels.join (' ')} \n"
     row_labels.each do | row |
       @cells.each do |coordinate, cell|
         if coordinate[0] == row
           row_output << cell.render(show_ship)
         end
       end
-      puts "#{row} #{row_output.join(" ")}\n"
+      output << "#{row} #{row_output.join(" ")} \n"
       row_output = []
     end
+    output
   end
 end
