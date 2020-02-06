@@ -24,9 +24,9 @@ class Cell
     @cell_hit ? true : false
   end
 
-  def render(show = false)
+  def render(show_ship = false)
     render_output = ""
-    if show == true && @ship != nil && fired_upon? == false
+    if show_ship == true && @ship != nil && fired_upon? == false
       render_output = "S"
     elsif fired_upon? == false
       render_output = "."
