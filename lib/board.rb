@@ -4,25 +4,21 @@ class Board
   def initialize
     @cells = {}
   end
-
-  def generate(size)
-    #code based on 4 x 4 currently
-    count = 1
-    size.times do
-      if count <= 4
-        key = "A#{count}"
-        @cells[key] = Cell.new(key)
-      elsif count <= 8
-        key = "B#{count-4}"
-        @cells[key] = Cell.new(key)
-      elsif count <= 12
-        key = "C#{count-8}"
-        @cells[key] = Cell.new(key)
-      elsif count <= 16
-        key = "D#{count-12}"
-        @cells[key] = Cell.new(key)
+  def generate(length, width)
+    row_count = 1
+    col_count = 1
+    @length = length
+    @width = width
+    (@length * @width).times do
+      if row_count <= width
+        width.times do
+          coordinate = "#{(row_count + 64).chr}#{col_count}"
+          @cells[coordinate] = Cell.new(coordinate)
+          col_count += 1
+        end
+        row_count += 1
+        col_count = 1
       end
-      count += 1
     end
   end
 
