@@ -22,7 +22,7 @@ class BoardTest < Minitest::Test
 
   def test_if_it_is_valid_coordinate?
     board = Board.new
-    board.generate(16)
+    board.generate(4, 4)
 
     assert_equal true, board.valid_coordinate?("A1")
     assert_equal true, board.valid_coordinate?("D4")
@@ -36,7 +36,7 @@ class BoardTest < Minitest::Test
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
 
-    board.generate(16)
+    board.generate(4, 4)
 
     assert_equal false, board.valid_placement?(cruiser, ["A1", "A2"])
     assert_equal false, board.valid_placement?(submarine, ["A2", "A3", "A4"])
@@ -47,7 +47,7 @@ class BoardTest < Minitest::Test
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
 
-    board.generate(16)
+    board.generate(4, 4)
 
     assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
     assert_equal false, board.valid_placement?(submarine, ["A1", "C1"])
@@ -60,7 +60,7 @@ class BoardTest < Minitest::Test
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
 
-    board.generate(16)
+    board.generate(4, 4)
 
     assert_equal false, board.valid_placement?(cruiser, ["A1", "B2", "C3"])
     assert_equal false, board.valid_placement?(submarine, ["C2", "D3"])
@@ -71,7 +71,7 @@ class BoardTest < Minitest::Test
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
 
-    board.generate(16)
+    board.generate(4, 4)
 
     assert_equal true, board.valid_placement?(submarine, ["A1", "A2"])
     assert_equal true, board.valid_placement?(cruiser, ["B1", "C1", "D1"])
@@ -81,7 +81,7 @@ class BoardTest < Minitest::Test
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
 
-    board.generate(16)
+    board.generate(4, 4)
     board.place(cruiser, ["A1", "A2", "A3"])
 
     cell1 = board.cells["A1"]
@@ -92,13 +92,14 @@ class BoardTest < Minitest::Test
     cell2.ship
     cell3.ship
 
+    assert_equal cell1.ship, cell2.ship
     assert_equal cell3.ship, cell2.ship
   end
 
   def test_it_cannot_overlap
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
-    board.generate(16)
+    board.generate(4, 4)
 
     board.place(cruiser, ["A1", "A2", "A3"])
     submarine = Ship.new("Submarine", 2)
@@ -107,17 +108,27 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_can_render
-    skip
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
-    board.generate(16)
+    board.generate(4, 4)
+    expected = "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
+    assert_equal expected, board.render
 
     board.place(cruiser, ["A1", "A2", "A3"])
+    expected2 = "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
+    assert_equal expected2, board.render(true)
+
     board.cells["A1"].fire_upon
+    expected3 = "  1 2 3 4 \nA H S S . \nB . . . . \nC . . . . \nD . . . . \n"
+    assert_equal expected3, board.render(true)
 
-    submarine = Ship.new("Submarine", 2)
-    board.place(submarine, ["C2", "C3"])
+    board.cells["B1"].fire_upon
+    expected4 = "  1 2 3 4 \nA H S S . \nB M . . . \nC . . . . \nD . . . . \n"
+    assert_equal expected4, board.render(true)
 
-    #require "pry"; binding.pry
+    board.cells["A2"].fire_upon
+    board.cells["A3"].fire_upon
+    expected4 = "  1 2 3 4 \nA X X X . \nB M . . . \nC . . . . \nD . . . . \n"
+    assert_equal expected4, board.render(true)
   end
 end

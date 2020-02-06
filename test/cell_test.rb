@@ -55,8 +55,7 @@ class CellTest < Minitest::Test
 
     cell1.fire_upon
     assert_equal "M", cell1.render
-    
-# shouldnt be able to place a ship after a cell has been fired upon
+
     cell2 = Cell.new("C3")
     cruiser = Ship.new("Cruiser", 3)
     cell2.place_ship(cruiser)
@@ -70,8 +69,4 @@ class CellTest < Minitest::Test
 
     assert_equal "X", cell2.render
   end
-
-
-
-
 end

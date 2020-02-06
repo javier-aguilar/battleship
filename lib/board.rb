@@ -3,26 +3,24 @@ class Board
 
   def initialize
     @cells = {}
+    @length = 0
+    @width = 0
   end
-
-  def generate(size)
-    #code based on 4 x 4 currently
-    count = 1
-    size.times do
-      if count <= 4
-        key = "A#{count}"
-        @cells[key] = Cell.new(key)
-      elsif count <= 8
-        key = "B#{count-4}"
-        @cells[key] = Cell.new(key)
-      elsif count <= 12
-        key = "C#{count-8}"
-        @cells[key] = Cell.new(key)
-      elsif count <= 16
-        key = "D#{count-12}"
-        @cells[key] = Cell.new(key)
+  def generate(length, width)
+    row_count = 1
+    col_count = 1
+    @length = length
+    @width = width
+    (@length * @width).times do
+      if row_count <= @width
+        @width.times do
+          coordinate = "#{(row_count + 64).chr}#{col_count}"
+          @cells[coordinate] = Cell.new(coordinate)
+          col_count += 1
+        end
+        row_count += 1
+        col_count = 1
       end
-      count += 1
     end
   end
 
@@ -43,19 +41,29 @@ class Board
   end
 
   def can_place_horizontal?(coordinates)
-    range = []
-    @cells.map {|cell_key, cell_value| range << cell_key}
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
-      coordinate1[0] == coordinate2[0] && coordinate1[1].to_i == (coordinate2[1].to_i - 1)
+      coordinate1_letter = coordinate1[0].ord #Ex: A of A1
+      coordinate1_number = coordinate1[1].to_i #Ex: 1 of A1
+
+      coordinate2_letter = coordinate2[0].ord #Ex: A of A2
+      coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
+
+      coordinate1_letter == coordinate2_letter && coordinate1_number == (coordinate2_number - 1)
+
     end
   end
 
   def can_place_vertical?(coordinates)
-    # A = 65, B = 66, C = 67, D = 68
-    range = []
-    @cells.map {|cell_key, cell_value| range << cell_key}
+    #A = 65, B = 66, C = 67, D = 68
     coordinates.each_cons(2).all? do | coordinate1, coordinate2 |
-      coordinate1[1] == coordinate2[1] && coordinate1[0].ord == (coordinate2[0].ord - 1)
+      coordinate1_letter = coordinate1[0].ord #Ex: A of A1
+      coordinate1_number = coordinate1[1].to_i #Ex: 1 of A1
+
+      coordinate2_letter = coordinate2[0].ord #Ex: A of A2
+      coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
+
+      coordinate1_number == coordinate2_number && coordinate1_letter == (coordinate2_letter - 1)
+
     end
   end
 
@@ -71,26 +79,22 @@ class Board
     coordinates.one? {|coordinate| @cells[coordinate].empty? }
   end
 
-  def render_board
-    col1 = []
-    col2 = []
-    col3 = []
-    col4 = []
-    @cells.each do |key, value|
-      if key[1].to_i == 1
-        col1 << value.render(true)
-      elsif key[1].to_i  == 2
-        col2 << value.render(true)
-      elsif key[1].to_i  == 3
-        col3 << value.render(true)
-      elsif key[1].to_i  == 4
-        col4 << value.render(true)
+  def render(show_ship = false)
+    row_labels = ('A'.. (@length + 64).chr).to_a
+    col_labels = (1..@width).to_a
+    row_output = []
+    output = ""
+
+    output << "  #{col_labels.join (' ')} \n"
+    row_labels.each do | row |
+      @cells.each do |coordinate, cell|
+        if coordinate[0] == row
+          row_output << cell.render(show_ship)
+        end
       end
+      output << "#{row} #{row_output.join(" ")} \n"
+      row_output = []
     end
-    puts " 1 2 3 4"
-    puts "A #{col1[0]} #{col2[0]} #{col3[0]} #{col4[0]} \n"
-    puts "B #{col1[1]} #{col2[1]} #{col3[1]} #{col4[1]} \n"
-    puts "C #{col1[2]} #{col2[2]} #{col3[2]} #{col4[2]} \n"
-    puts "D #{col1[3]} #{col2[3]} #{col3[3]} #{col4[3]} \n"
+    output
   end
 end
