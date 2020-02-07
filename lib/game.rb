@@ -22,12 +22,14 @@ class Game
       user_board.generate(4, 4)
       computer_place_ships(computer_board)
 
-      puts "=============COMPUTER BOARD============="
+      puts "\n=============COMPUTER BOARD============="
       puts computer_board.render
 
-      user_place_ships(user_board)
-      puts "=============PLAYER BOARD============="
+      puts "\n=============PLAYER BOARD============="
       puts user_board.render(true)
+      user_place_ships(user_board)
+      puts user_board.render(true)
+
     elsif user_input == "q"
       puts "Quitting game"
     else
@@ -45,7 +47,7 @@ class Game
   def user_place_ships(user_board)
     user_cruiser = Ship.new("Cruiser", 3)
 
-    puts "I have laid out my ships on the grid."
+    puts "\nI have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
     puts "Enter the squares for the Cruiser (3 spaces):"
