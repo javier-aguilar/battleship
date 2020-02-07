@@ -1,3 +1,8 @@
+require './lib/ship'
+require './lib/cell'
+require './lib/board'
+require './lib/game'
+
 class Game
   def initialize
   end
@@ -19,6 +24,8 @@ class Game
 
       puts "=============COMPUTER BOARD============="
       puts computer_board.render
+
+      user_place_ships(user_board)
       puts "=============PLAYER BOARD============="
       puts user_board.render(true)
     elsif user_input == "q"
@@ -29,9 +36,27 @@ class Game
     end
   end
 
-  def computer_place_ships(board)
+  def computer_place_ships(computer_board)
     cruiser = Ship.new("Cruiser", 3)
     coordinates = ["A1", "A2", "A3"]
-    board.place(cruiser, coordinates)
+    computer_board.place(cruiser, coordinates)
+  end
+
+  def user_place_ships(user_board)
+    user_cruiser = Ship.new("Cruiser", 3)
+
+    puts "I have laid out my ships on the grid."
+    puts "You now need to lay out your two ships."
+    puts "The Cruiser is three units long and the Submarine is two units long."
+    puts "Enter the squares for the Cruiser (3 spaces):"
+    print ">"
+    coordinates = gets.chomp.upcase.split(" ")
+
+    until user_board.valid_placement?(user_cruiser, coordinates)
+        puts "Those are invalid coordinates. Please try again."
+        print "> "
+        coordinates = gets.chomp.upcase.split(" ")
+     end
+    user_board.place(user_cruiser, coordinates)
   end
 end
