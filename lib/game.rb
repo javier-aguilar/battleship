@@ -22,7 +22,16 @@ class Game
       computer_board.generate(length, width)
       user_board = Board.new
       # user_board.generate(4, 4)
-      computer_place_ships(computer_board)
+
+      computer_cruiser = Ship.new("Cruiser", 3)
+      coordinates = ["A1", "A2", "A3"]
+      computer_board.place(computer_cruiser, coordinates)
+
+      computer_submarine = Ship.new("Submarine", 2)
+      coordinates = ["C2", "C3"]
+      computer_board.place(computer_submarine, coordinates)
+
+      # computer_place_ships(computer_board)
       user_board.generate(length, width)
       puts "\n=============COMPUTER BOARD============="
       puts computer_board.render
@@ -32,7 +41,10 @@ class Game
       user_place_cruiser(user_board)
       user_place_submarine(user_board)
       # puts user_board.render(true)
-      user_fire_shot(computer_board)
+
+      until computer_cruiser.sunk? && computer_submarine.sunk?
+        user_fire_shot(computer_board)
+      end
 
       # user_fire_shot(computer_board)
       # puts "\n=============COMPUTER BOARD============="
