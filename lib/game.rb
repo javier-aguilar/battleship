@@ -17,11 +17,13 @@ class Game
       puts "Game loading ..."
 
       computer_board = Board.new
-      computer_board.generate(4, 4)
+      length = user_board_length
+      width = user_board_width
+      computer_board.generate(length, width)
       user_board = Board.new
       # user_board.generate(4, 4)
       computer_place_ships(computer_board)
-      user_board.generate(user_board_length, user_board_width)
+      user_board.generate(length, width)
       puts "\n=============COMPUTER BOARD============="
       puts computer_board.render
 
