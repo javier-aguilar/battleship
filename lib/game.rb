@@ -124,5 +124,13 @@ class Game
     end
     computer_board.cells[coordinate].fire_upon
     puts computer_board.render
+
+    if computer_board.cells[coordinate].render == "M"
+      puts "Your shot on #{coordinate} was a miss."
+    elsif computer_board.cells[coordinate].render == "H"
+      puts "Your shot on #{coordinate} was a hit."
+    elsif computer_board.cells[coordinate].render == "X"
+      puts "Your shot on #{coordinate} sunk my ship."
+    end
   end
 end
