@@ -76,7 +76,7 @@ class Board
   end
 
   def is_occupied?(coordinates)
-    coordinates.one? {|coordinate| @cells[coordinate].empty? }
+    coordinates.any? {|coordinate| !@cells[coordinate].empty? }
   end
 
   def render(show_ship = false)
