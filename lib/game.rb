@@ -7,6 +7,7 @@ class Game
   def initialize
     @user_cruiser = nil
     @user_submarine = nil
+    @computer_turns = []
   end
 
   def start
@@ -16,16 +17,12 @@ class Game
     user_input = gets.chomp.downcase
 
     if user_input == "p"
-      puts "Game loading ..."
-
       size = get_board_size
 
       computer_board = Board.new
       computer_board.generate(size[0], size[1])
       user_board = Board.new
       user_board.generate(size[0], size[1])
-
-      require "pry" ; binding.pry
 
       computer_cruiser = Ship.new("Cruiser", 3)
       computer_submarine = Ship.new("Submarine", 2)
@@ -36,21 +33,22 @@ class Game
       coordinates2 = randomize_ship_placement(computer_submarine, computer_board)
       computer_board.place(computer_submarine, coordinates2)
 
-      puts "\n=============COMPUTER BOARD============="
-      puts computer_board.render(true)
+      puts "\n=============COMPUTER BOARD=============".red
+      puts computer_board.render(true).red
 
-      puts "\n=============PLAYER BOARD============="
+      puts "\n=============PLAYER BOARD==============="
       puts user_board.render(true)
       user_place_ships(user_board)
 
+      turn_counter = 0
       until (computer_cruiser.sunk? && computer_submarine.sunk?) || (@user_cruiser.sunk? && @user_submarine.sunk?)
+        puts "\n=============TURN #{turn_counter += 1}============="
         user_fire_shot(computer_board)
         computer_fire_shot(user_board)
       end
 
-      puts "\n========================================"
-      puts "\nYou won!\n" if computer_cruiser.sunk? && computer_submarine.sunk?
-      puts "I won! Hahah\n" if @user_cruiser.sunk? && @user_submarine.sunk?
+      puts "*******************\nYou won!\n*******************" if computer_cruiser.sunk? && computer_submarine.sunk?
+      puts "*******************\nI won! ( ⓛ ω ⓛ *)\n*******************".red if @user_cruiser.sunk? && @user_submarine.sunk?
       start
 
     elsif user_input == "q"
@@ -92,9 +90,9 @@ class Game
     coordinates = gets.chomp.upcase.split(" ")
 
     until user_board.valid_placement?(@user_cruiser, coordinates)
-        puts "Those are invalid coordinates. Please try again."
-        print "> "
-        coordinates = gets.chomp.upcase.split(" ")
+      puts "Those are invalid coordinates. Please try again."
+      print "> "
+      coordinates = gets.chomp.upcase.split(" ")
     end
 
     user_board.place(@user_cruiser, coordinates)
@@ -105,9 +103,9 @@ class Game
     coordinates = gets.chomp.upcase.split(" ")
 
     until user_board.valid_placement?(@user_submarine, coordinates)
-        puts "Those are invalid coordinates. Please try again."
-        print "> "
-        coordinates = gets.chomp.upcase.split(" ")
+      puts "Those are invalid coordinates. Please try again."
+      print "> "
+      coordinates = gets.chomp.upcase.split(" ")
     end
     user_board.place(@user_submarine, coordinates)
     puts user_board.render(true)
@@ -117,34 +115,47 @@ class Game
   def user_fire_shot(computer_board)
     puts "Enter the coordinate for your shot:"
     print ">"
-    coordinate = gets.chomp.upcase[0...2]
+    coordinate = gets.chomp.upcase
 
     until computer_board.valid_coordinate?(coordinate) && computer_board.cells[coordinate].render == "."
       output = ""
       computer_board.cells[coordinate].render != "." ? output = "You already fired on #{coordinate}. Please try again" : output = "Invalid coordinate. Please try again."
       puts output
       print "> "
-      coordinate = gets.chomp.upcase[0...2]
+      coordinate = gets.chomp.upcase
     end
     computer_board.cells[coordinate].fire_upon
-    puts computer_board.render
+    puts "\n=============COMPUTER BOARD=============".red
+    puts computer_board.render.red
     results(computer_board, coordinate)
   end
 
   def computer_fire_shot(user_board)
+
     coordinate = user_board.cells.keys.sample
-    user_board.cells[coordinate].render == "." ? user_board.cells[coordinate].fire_upon : computer_fire_shot(user_board)
-    puts user_board.render
-    results(user_board, coordinate, "computer")
+    until !@computer_turns.include? coordinate
+      coordinate = user_board.cells.keys.sample
+    end
+
+    if user_board.cells[coordinate].render == "."
+      @computer_turns << coordinate
+      user_board.cells[coordinate].fire_upon
+      puts "\n=============PLAYER BOARD==============="
+      puts "#{user_board.render}\n"
+      results(user_board, coordinate, "computer")
+    else
+      puts "My mistake!"
+      computer_fire_shot(user_board)
+    end
   end
 
   def results(board, coordinate, player = "human")
     if board.cells[coordinate].render == "M"
-      player == "computer" ? (puts "My shot on #{coordinate} was a miss.") : (puts "Your shot on #{coordinate} was a miss.")
+      player == "computer" ? (puts "My shot on #{coordinate} was a miss.") : (puts "Your shot on #{coordinate} was a miss.".red)
     elsif board.cells[coordinate].render == "H"
-      player == "computer" ? (puts "My shot on #{coordinate} was a hit.") : (puts "Your shot on #{coordinate} was a hit.")
+      player == "computer" ? (puts "My shot on #{coordinate} was a hit.") : (puts "Your shot on #{coordinate} was a hit.".red)
     elsif board.cells[coordinate].render == "X"
-      player == "computer" ? (puts "My shot on #{coordinate} sunk your ship.") : (puts "Your shot on #{coordinate} sunk my ship.")
+      player == "computer" ? (puts "My shot on #{coordinate} sunk your ship.") : (puts "Your shot on #{coordinate} sunk my ship.".red)
     end
   end
 
