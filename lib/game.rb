@@ -5,6 +5,8 @@ require './lib/game'
 
 class Game
   def initialize
+    @user_cruiser = nil
+    @user_submarine = nil
   end
 
   def start
@@ -42,9 +44,15 @@ class Game
       user_place_submarine(user_board)
       # puts user_board.render(true)
 
-      until computer_cruiser.sunk? && computer_submarine.sunk?
+      until (computer_cruiser.sunk? && computer_submarine.sunk?) || (@user_cruiser.sunk? && @user_submarine.sunk?)
         user_fire_shot(computer_board)
+        computer_fire_shot(user_board)
       end
+
+      puts "\n========================================"
+      puts "\nYou won!\n" if computer_cruiser.sunk? && computer_submarine.sunk?
+      puts "I won! Hahah\n" if @user_cruiser.sunk? && @user_submarine.sunk?
+      start
 
       # user_fire_shot(computer_board)
       # puts "\n=============COMPUTER BOARD============="
@@ -91,7 +99,7 @@ class Game
   end
 
   def user_place_cruiser(user_board)
-    user_cruiser = Ship.new("Cruiser", 3)
+    @user_cruiser = Ship.new("Cruiser", 3)
 
     puts "\nI have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
@@ -100,27 +108,27 @@ class Game
     print ">"
     coordinates = gets.chomp.upcase.split(" ")
 
-    until user_board.valid_placement?(user_cruiser, coordinates)
+    until user_board.valid_placement?(@user_cruiser, coordinates)
         puts "Those are invalid coordinates. Please try again."
         print "> "
         coordinates = gets.chomp.upcase.split(" ")
      end
 
-    user_board.place(user_cruiser, coordinates)
+    user_board.place(@user_cruiser, coordinates)
   end
 
   def user_place_submarine(user_board)
-    user_submarine = Ship.new("Submarine", 2)
+    @user_submarine = Ship.new("Submarine", 2)
     puts "Enter the squares for the Submarine. (Ex: B1 B2):"
     print ">"
     coordinates = gets.chomp.upcase.split(" ")
 
-    until user_board.valid_placement?(user_submarine, coordinates)
+    until user_board.valid_placement?(@user_submarine, coordinates)
         puts "Those are invalid coordinates. Please try again."
         print "> "
         coordinates = gets.chomp.upcase.split(" ")
     end
-    user_board.place(user_submarine, coordinates)
+    user_board.place(@user_submarine, coordinates)
     puts user_board.render(true)
   end
 
@@ -129,8 +137,10 @@ class Game
     print ">"
     coordinate = gets.chomp.upcase
 
-    until computer_board.valid_coordinate?(coordinate)
-      puts "Invalid coordinate. Please try again."
+    until computer_board.valid_coordinate?(coordinate) && computer_board.cells[coordinate].render == "."
+      output = ""
+      computer_board.cells[coordinate].render != "." ? output = "You already fired on #{coordinate}." : output = "Invalid coordinate. Please try again."
+      puts output
       print "> "
       coordinate = gets.chomp.upcase
     end
@@ -143,6 +153,24 @@ class Game
       puts "Your shot on #{coordinate} was a hit."
     elsif computer_board.cells[coordinate].render == "X"
       puts "Your shot on #{coordinate} sunk my ship."
+    end
+  end
+
+  def computer_fire_shot(user_board)
+    coordinate = user_board.cells.keys.sample
+    if user_board.cells[coordinate].render == "."
+      user_board.cells[coordinate].fire_upon
+    else
+      computer_fire_shot(user_board)
+    end
+    puts user_board.render
+
+    if user_board.cells[coordinate].render == "M"
+      puts "My shot on #{coordinate} was a miss."
+    elsif user_board.cells[coordinate].render == "H"
+      puts "My shot on #{coordinate} was a hit."
+    elsif user_board.cells[coordinate].render == "X"
+      puts "My shot on #{coordinate} sunk your ship."
     end
   end
 end
