@@ -6,6 +6,7 @@ class Board
     @length = 0
     @width = 0
   end
+  
   def generate(width, length)
     row_count = 1
     col_count = 1
@@ -49,7 +50,6 @@ class Board
       coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
 
       coordinate1_letter == coordinate2_letter && coordinate1_number == (coordinate2_number - 1)
-
     end
   end
 
@@ -63,7 +63,6 @@ class Board
       coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
 
       coordinate1_number == coordinate2_number && coordinate1_letter == (coordinate2_letter - 1)
-
     end
   end
 
