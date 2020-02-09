@@ -12,16 +12,16 @@ class Game
     "Enter p to play. Enter q to quit."
 
     user_input = gets.chomp.downcase
-    puts user_input
 
     if user_input == "p"
       puts "Game loading ..."
+
       computer_board = Board.new
       computer_board.generate(4, 4)
       user_board = Board.new
-      user_board.generate(4, 4)
+      # user_board.generate(4, 4)
       computer_place_ships(computer_board)
-
+      user_board.generate(user_board_length, user_board_width)
       puts "\n=============COMPUTER BOARD============="
       puts computer_board.render
 
@@ -29,9 +29,12 @@ class Game
       puts user_board.render(true)
       user_place_cruiser(user_board)
       user_place_submarine(user_board)
-
+      # puts user_board.render(true)
       user_fire_shot(computer_board)
-      puts computer_board.render
+
+      # user_fire_shot(computer_board)
+      # puts "\n=============COMPUTER BOARD============="
+      # puts computer_board.render
 
     elsif user_input == "q"
       puts "Quitting game"
@@ -41,20 +44,27 @@ class Game
     end
   end
 
-  # def custom_board_size
-  #   puts "My system can handle boards of any size.\n"
-  #   puts "Enter Y to create a custom board. Enter N to continue to game play."
-  #   print >
-  #   user_input = gets.chomp.uppercase
-  #   if user_input == "Y"
-  #     puts "Enter the length of your board."
-  #     print >
-  #     length = gets.chomp
-  #   else user_input == "N"
-  #     user_board.generate(4, 4)
-  #     computer_board.generate(4, 4)
-  #   end
+  # def user_ships_sunk?
+  #   user_cruiser.sunk? && user_submarine.sunk?
   # end
+  #
+  # def computer_ships_sunk?
+  #   computer_cruiser.sunk? && computer_submarine.sunk?
+  # end
+
+  def user_board_width
+    puts "Enter the width of your board."
+    print ">"
+    user_input = gets.chomp.strip.to_i
+    user_input
+  end
+
+  def user_board_length
+    puts "Enter the length of your board."
+    print ">"
+    user_input = gets.chomp.strip.to_i
+    user_input
+  end
 
   def computer_place_ships(computer_board)
     cruiser = Ship.new("Cruiser", 3)
@@ -81,8 +91,8 @@ class Game
         print "> "
         coordinates = gets.chomp.upcase.split(" ")
      end
+
     user_board.place(user_cruiser, coordinates)
-    puts user_board.render(true)
   end
 
   def user_place_submarine(user_board)
@@ -95,10 +105,9 @@ class Game
         puts "Those are invalid coordinates. Please try again."
         print "> "
         coordinates = gets.chomp.upcase.split(" ")
-     end
+    end
     user_board.place(user_submarine, coordinates)
     puts user_board.render(true)
-    #this can all be refactored, probably
   end
 
   def user_fire_shot(computer_board)
@@ -106,12 +115,12 @@ class Game
     print ">"
     coordinate = gets.chomp.upcase
 
-    until coordinate.valid_coordinate?(coordinate)
-      puts "Those are invalid coordinates. Please try again."
+    until computer_board.valid_coordinate?(coordinate)
+      puts "Invalid coordinate. Please try again."
       print "> "
       coordinate = gets.chomp.upcase
     end
-    computer_board.fire_upon(coordinate)
+    computer_board.cells[coordinate].fire_upon
     puts computer_board.render
   end
 end
