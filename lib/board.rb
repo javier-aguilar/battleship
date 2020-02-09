@@ -1,18 +1,18 @@
 class Board
-  attr_reader :cells
+  attr_reader :cells, :width, :length
 
   def initialize
     @cells = {}
     @length = 0
     @width = 0
   end
-  def generate(length, width)
+  def generate(width, length)
     row_count = 1
     col_count = 1
     @length = length
     @width = width
     (@length * @width).times do
-      if row_count <= @width
+      if col_count <= @width && row_count <= @length
         @width.times do
           coordinate = "#{(row_count + 64).chr}#{col_count}"
           @cells[coordinate] = Cell.new(coordinate)
