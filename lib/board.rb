@@ -1,18 +1,19 @@
 class Board
-  attr_reader :cells
+  attr_reader :cells, :width, :length
 
   def initialize
     @cells = {}
     @length = 0
     @width = 0
   end
-  def generate(length, width)
+  
+  def generate(width, length)
     row_count = 1
     col_count = 1
     @length = length
     @width = width
     (@length * @width).times do
-      if row_count <= @width
+      if col_count <= @width && row_count <= @length
         @width.times do
           coordinate = "#{(row_count + 64).chr}#{col_count}"
           @cells[coordinate] = Cell.new(coordinate)
@@ -49,7 +50,6 @@ class Board
       coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
 
       coordinate1_letter == coordinate2_letter && coordinate1_number == (coordinate2_number - 1)
-
     end
   end
 
@@ -63,7 +63,6 @@ class Board
       coordinate2_number = coordinate2[1].to_i #Ex: 2 of A2
 
       coordinate1_number == coordinate2_number && coordinate1_letter == (coordinate2_letter - 1)
-
     end
   end
 
@@ -76,7 +75,7 @@ class Board
   end
 
   def is_occupied?(coordinates)
-    coordinates.one? {|coordinate| @cells[coordinate].empty? }
+    coordinates.any? {|coordinate| !@cells[coordinate].empty? }
   end
 
   def render(show_ship = false)
