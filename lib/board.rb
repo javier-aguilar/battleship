@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Board
   attr_reader :cells, :width, :length
 
