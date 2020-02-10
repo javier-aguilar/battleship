@@ -29,7 +29,7 @@ class Board
 
   def valid_placement?(ship, coordinates)
     if ship.length == coordinates.length
-      if (can_place_vertical?(coordinates) || can_place_horizontal?(coordinates)) && is_occupied?(coordinates) == false
+      if can_place_ship?(coordinates) && is_occupied?(coordinates) == false
         true
       else
         false
@@ -37,6 +37,10 @@ class Board
     else
       false
     end
+  end
+
+  def can_place_ship?(coordinates)
+    can_place_vertical?(coordinates) || can_place_horizontal?(coordinates)
   end
 
   def can_place_horizontal?(coordinates)
@@ -47,7 +51,8 @@ class Board
       coordinate2_letter = coordinate2[0].ord # Ex: A of A2
       coordinate2_number = coordinate2[1].to_i # Ex: 2 of A2
 
-      coordinate1_letter == coordinate2_letter && coordinate1_number == (coordinate2_number - 1)
+      coordinate1_letter == coordinate2_letter &&
+        coordinate1_number == (coordinate2_number - 1)
     end
   end
 
@@ -60,7 +65,8 @@ class Board
       coordinate2_letter = coordinate2[0].ord # Ex: A of A2
       coordinate2_number = coordinate2[1].to_i # Ex: 2 of A2
 
-      coordinate1_number == coordinate2_number && coordinate1_letter == (coordinate2_letter - 1)
+      coordinate1_number == coordinate2_number &&
+        coordinate1_letter == (coordinate2_letter - 1)
     end
   end
 
