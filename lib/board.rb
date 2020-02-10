@@ -87,11 +87,18 @@ class Board
     col_labels = (1..@width).to_a
     row_output = []
     output = ''
+    col_count = 0
 
     output << "  #{col_labels.join ' '} \n"
     row_labels.each do |row|
       @cells.each do |coordinate, cell|
-        row_output << cell.render(show_ship) if coordinate[0] == row
+        col_count += 1
+        if coordinate[0] == row && col_count >= 10
+          row_output << " #{cell.render(show_ship)}"
+        elsif coordinate[0] == row
+          row_output << cell.render(show_ship)
+        end
+        col_count = 0 if col_count == @width
       end
       output << "#{row} #{row_output.join(' ')} \n"
       row_output = []
