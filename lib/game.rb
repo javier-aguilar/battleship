@@ -1,5 +1,7 @@
 class Game
 
+  attr_reader :user_info, :computer_info
+
   def initialize
     @user_info = {ships: {}}
     @computer_info = {ships: {}, computer_turns: []}
@@ -46,7 +48,7 @@ class Game
         user_fire_shot
         computer_fire_shot if !is_game_over?
       end
-      summary
+      puts summary
       start
     elsif user_input == 'q'
       puts 'Quitting game. Goodbye!'
@@ -69,7 +71,7 @@ class Game
     puts 'Enter the length of your board. (Ex: 4)'
     print '>'
     user_input[1] = gets.chomp.strip.to_i
-    until user_input[1] > 0
+    until user_input[1] > 0 && user_input[0] <= 26
       puts 'Invalid input. Please try again.'
       print '>'
       user_input[1] = gets.chomp.strip.to_i
@@ -135,7 +137,6 @@ class Game
     while @computer_info[:computer_turns].include? coordinate
       coordinate = @user_info[:board].cells.keys.sample
     end
-
     @computer_info[:computer_turns] << coordinate
     @user_info[:board].cells[coordinate].fire_upon
     display_board
@@ -235,11 +236,12 @@ class Game
 
   def summary
     if @computer_info[:ships][:cruiser].sunk? && @computer_info[:ships][:submarine].sunk?
-      puts "\n*******************\nYou won!\n***************************".green
+      output = "\n*******************\nYou won!\n*******************".green
     end
     if @user_info[:ships][:cruiser].sunk? && @user_info[:ships][:submarine].sunk?
-      puts "\n*******************\nI won! ( ⓛ ω ⓛ *)\n*******************".red
+      output = "\n*******************\nI won! ( ⓛ ω ⓛ *)\n*******************".red
     end
     @computer_info[:computer_turns] = []
+    output
   end
 end
