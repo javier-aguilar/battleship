@@ -1,17 +1,15 @@
 class Board
   attr_reader :cells, :width, :length
 
-  def initialize
+  def initialize(width_parameter = 4, length_parameter = 4)
     @cells = {}
-    @length = 0
-    @width = 0
+    @width = width_parameter
+    @length = length_parameter
   end
 
-  def generate(width, length)
+  def generate
     row_count = 1
     col_count = 1
-    @length = length
-    @width = width
     (@length * @width).times do
       next unless col_count <= @width && row_count <= @length
 
