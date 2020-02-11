@@ -53,4 +53,14 @@ class GameTest < Minitest::Test
     assert_equal expected, @game.summary
   end
 
+  def test_game_over
+    @game.user_info[:board].place(@game.user_info[:ships][:submarine], ["A1", "A2", "A3"])
+    @game.user_info[:board].place(@game.user_info[:ships][:cruiser], ["B1", "B2"])
+    assert_equal false, @game.is_game_over?
+
+    3.times { @game.user_info[:ships][:cruiser].hit }
+    2.times { @game.user_info[:ships][:submarine].hit }
+    assert_equal true, @game.is_game_over?
+  end
+
 end
