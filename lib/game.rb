@@ -8,7 +8,7 @@ class Game
   end
 
   def main_menu
-    puts "Welcome to BATTLESHIP \n" + 'Enter p to play. Enter q to quit.'
+    puts "Welcome to BATTLESHIP\n" + 'Enter p to play. Enter q to quit.'
     print '>'
     user_input = gets.strip.downcase
 
@@ -36,7 +36,7 @@ class Game
       @computer_info[:board].place(@computer_info[:ships][:submarine], coordinates2)
 
       puts "\n=============COMPUTER BOARD=============".red
-      puts @computer_info[:board].render(true).red
+      puts @computer_info[:board].render.red
 
       puts "\n=============PLAYER BOARD==============="
       puts @user_info[:board].render(true)
