@@ -5,4 +5,4 @@ require './lib/game'
 require 'colorize'
 
 game = Game.new
-game.start
+game.main_menu
