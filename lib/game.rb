@@ -7,7 +7,7 @@ class Game
     @computer_info = {ships: {}, computer_turns: []}
   end
 
-  def start
+  def main_menu
     puts "Welcome to BATTLESHIP \n" + 'Enter p to play. Enter q to quit.'
     print '>'
     user_input = gets.strip.downcase
@@ -49,12 +49,12 @@ class Game
         computer_fire_shot if !is_game_over?
       end
       puts summary
-      start
+      main_menu
     elsif user_input == 'q'
       puts 'Quitting game. Goodbye!'
     else
       puts 'Enter valid input.'
-      start
+      main_menu
     end
   end
 
@@ -128,8 +128,8 @@ class Game
     end
 
     @computer_info[:board].cells[coordinate].fire_upon
-    display_board("computer")
-    results(@computer_info[:board], coordinate)
+    puts display_board("computer")
+    puts results(@computer_info[:board], coordinate)
   end
 
   def computer_fire_shot
@@ -139,40 +139,43 @@ class Game
     end
     @computer_info[:computer_turns] << coordinate
     @user_info[:board].cells[coordinate].fire_upon
-    display_board
-    results(@user_info[:board], coordinate, 'computer')
+    puts display_board
+    puts results(@user_info[:board], coordinate, 'computer')
   end
 
   def display_board(player = "human")
     if player == "computer"
-      puts "\n=============COMPUTER BOARD=============".red
-      puts @computer_info[:board].render.red
+      output = "\n=============COMPUTER BOARD=============\n".red
+      output += @computer_info[:board].render.red
     else
-      puts "\n=============PLAYER BOARD==============="
-      puts "#{@user_info[:board].render}\n"
+      output = "\n=============PLAYER BOARD===============\n"
+      output += "#{@user_info[:board].render}\n"
     end
+    output
   end
 
   def results(board, coordinate, player = "human")
     if board.cells[coordinate].render == 'M'
       if player == 'computer'
-        puts "My shot on #{coordinate} was a miss."
+        output = "My shot on #{coordinate} was a miss."
       else
-        puts "Your shot on #{coordinate} was a miss.".red
+        output = "Your shot on #{coordinate} was a miss.".red
       end
     elsif board.cells[coordinate].render == 'H'
       if player == 'computer'
-        puts "My shot on #{coordinate} was a hit."
+        output = "My shot on #{coordinate} was a hit."
       else
-        puts "Your shot on #{coordinate} was a hit.".red
+        output = "Your shot on #{coordinate} was a hit.".red
+        # system(exec "afplay /Users/pippo/turing/1module/battleship/lib/sound.wav")
       end
     elsif board.cells[coordinate].render == 'X'
       if player == 'computer'
-        puts "My shot on #{coordinate} sunk your ship."
+        output = "My shot on #{coordinate} sunk your ship."
       else
-        puts "Your shot on #{coordinate} sunk my ship.".red
+        output = "Your shot on #{coordinate} sunk my ship.".red
       end
     end
+    output
   end
 
   def is_game_over?
@@ -237,8 +240,7 @@ class Game
   def summary
     if @computer_info[:ships][:cruiser].sunk? && @computer_info[:ships][:submarine].sunk?
       output = "\n*******************\nYou won!\n*******************".green
-    end
-    if @user_info[:ships][:cruiser].sunk? && @user_info[:ships][:submarine].sunk?
+    else
       output = "\n*******************\nI won! ( ⓛ ω ⓛ *)\n*******************".red
     end
     @computer_info[:computer_turns] = []
