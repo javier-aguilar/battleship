@@ -28,7 +28,7 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    if ship.length == coordinates.length
+    if ship.length == coordinates.length && coordinates.all? {|coordinate| valid_coordinate? (coordinate)}
       if can_place_ship?(coordinates) && is_occupied?(coordinates) == false
         true
       else
