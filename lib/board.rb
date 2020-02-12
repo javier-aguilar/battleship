@@ -1,7 +1,7 @@
 class Board
   attr_reader :cells, :width, :length
 
-  def initialize(width_parameter, length_parameter)
+  def initialize(width_parameter = 4, length_parameter = 4)
     @cells = {}
     @width = width_parameter
     @length = length_parameter
