@@ -16,13 +16,13 @@ class GameTest < Minitest::Test
     @game.user_info[:board].generate
 
     @game.computer_info[:ships] = {
-      submarine: Ship.new('Submarine', 3),
-      cruiser: Ship.new('Cruiser', 2)
+      submarine: Ship.new('Submarine', 2),
+      cruiser: Ship.new('Cruiser', 3)
     }
 
     @game.user_info[:ships] = {
-      submarine: Ship.new('Submarine', 3),
-      cruiser: Ship.new('Cruiser', 2)
+      submarine: Ship.new('Submarine', 2),
+      cruiser: Ship.new('Cruiser', 3)
     }
   end
 
@@ -32,40 +32,40 @@ class GameTest < Minitest::Test
   end
 
   def test_summary_if_player_won
-    2.times { @game.computer_info[:ships][:cruiser].hit }
-    3.times { @game.computer_info[:ships][:submarine].hit }
+    3.times { @game.computer_info[:ships][:cruiser].hit }
+    2.times { @game.computer_info[:ships][:submarine].hit }
 
     expected = "\n*******************\nYou won!\n*******************".green
     assert_equal expected, @game.summary
   end
 
   def test_summary_if_player_lost
-    @game.user_info[:board].place(@game.user_info[:ships][:submarine], ["A1", "A2", "A3"])
-    @game.user_info[:board].place(@game.user_info[:ships][:cruiser], ["B1", "B2"])
+    @game.user_info[:board].place(@game.user_info[:ships][:cruiser], ["A1", "A2", "A3"])
+    @game.user_info[:board].place(@game.user_info[:ships][:submarine], ["B1", "B2"])
 
-    2.times { @game.user_info[:ships][:cruiser].hit }
-    3.times { @game.user_info[:ships][:submarine].hit }
+    3.times { @game.user_info[:ships][:cruiser].hit }
+    2.times { @game.user_info[:ships][:submarine].hit }
 
     expected = "\n*******************\nI won! ( ⓛ ω ⓛ *)\n*******************".red
     assert_equal expected, @game.summary
   end
 
   def test_is_game_over
-    @game.user_info[:board].place(@game.user_info[:ships][:submarine], ["A1", "A2", "A3"])
-    @game.user_info[:board].place(@game.user_info[:ships][:cruiser], ["B1", "B2"])
+    @game.user_info[:board].place(@game.user_info[:ships][:cruiser], ["A1", "A2", "A3"])
+    @game.user_info[:board].place(@game.user_info[:ships][:submarine], ["B1", "B2"])
     assert_equal false, @game.is_game_over?
 
-    2.times { @game.user_info[:ships][:cruiser].hit }
-    3.times { @game.user_info[:ships][:submarine].hit }
+    3.times { @game.user_info[:ships][:cruiser].hit }
+    2.times { @game.user_info[:ships][:submarine].hit }
     assert_equal true, @game.is_game_over?
   end
 
   def test_it_returns_results
-    @game.computer_info[:board].place(@game.computer_info[:ships][:submarine], ["A1", "A2", "A3"])
-    @game.computer_info[:board].place(@game.computer_info[:ships][:cruiser], ["B1", "B2"])
+    @game.computer_info[:board].place(@game.computer_info[:ships][:cruiser], ["A1", "A2", "A3"])
+    @game.computer_info[:board].place(@game.computer_info[:ships][:submarine], ["B1", "B2"])
 
-    @game.user_info[:board].place(@game.user_info[:ships][:submarine], ["A1", "A2", "A3"])
-    @game.user_info[:board].place(@game.user_info[:ships][:cruiser], ["B1", "B2"])
+    @game.user_info[:board].place(@game.user_info[:ships][:cruiser], ["A1", "A2", "A3"])
+    @game.user_info[:board].place(@game.user_info[:ships][:submarine], ["B1", "B2"])
 
     @game.computer_info[:board].cells["C1"].fire_upon
     expected = "Your shot on C1 was a miss.".red
