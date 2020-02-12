@@ -61,7 +61,6 @@ class GameTest < Minitest::Test
   end
 
   def test_it_returns_results
-
     @game.computer_info[:board].place(@game.computer_info[:ships][:submarine], ["A1", "A2", "A3"])
     @game.computer_info[:board].place(@game.computer_info[:ships][:cruiser], ["B1", "B2"])
 
@@ -93,7 +92,5 @@ class GameTest < Minitest::Test
     @game.user_info[:board].cells["A3"].fire_upon
     expected = "My shot on A3 sunk your ship."
     assert_equal expected, @game.results(@game.user_info[:board], "A3", "computer")
-
-
   end
 end
