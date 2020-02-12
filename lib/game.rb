@@ -63,7 +63,7 @@ class Game
     puts 'Enter the width of your board. (Ex: 4)'
     print '>'
     user_input[0] = gets.chomp.strip.to_i
-    until user_input[0] > 0
+    until user_input[0] >= 4
       puts 'Invalid input. Please try again.'
       print '>'
       user_input[0] = gets.chomp.strip.to_i
@@ -71,7 +71,7 @@ class Game
     puts 'Enter the length of your board. (Ex: 4)'
     print '>'
     user_input[1] = gets.chomp.strip.to_i
-    until user_input[1] > 0 && user_input[0] <= 26
+    until user_input[1] >= 4 && user_input[0] <= 26
       puts 'Invalid input. Please try again.'
       print '>'
       user_input[1] = gets.chomp.strip.to_i
